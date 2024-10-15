@@ -1,4 +1,3 @@
-
 # To compile and run with a lab solution, set the lab name in lab.mk
 # (e.g., LAB=util).  Run make grade to test solution with the lab's
 # grade script (e.g., grade-lab-util).
@@ -177,8 +176,7 @@ mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
 .PRECIOUS: %.o
 
 UPROGS=\
-	$U/_cat\
-	$U/_echo\
+	\
 	$U/_forktest\
 	$U/_grep\
 	$U/_init\
@@ -193,6 +191,13 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
+	$U/_sleep\
+	$U/_pingpong\
+	$U/_primes\
+	$U/_find\
+	$U/_xargs\
+	$U/_trace\
+	$U/_sysinfotest\
 
 
 
