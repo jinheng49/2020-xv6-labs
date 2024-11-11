@@ -80,7 +80,36 @@ sys_sleep(void)
 int
 sys_pgaccess(void)
 {
-  // lab pgtbl: your code here.
+  int num_check;
+  uint64 va;
+  uint64 dstva;
+  pagetable_t pagetable = myproc()->pagetable;
+  
+  uint64 check_va;
+  pte_t *pte;
+  uint32 buf = 0; 
+  
+
+  if (argaddr(0, &va) < 0 || argint(1, &num_check) < 0 || argaddr(2, &dstva) < 0) {
+    return -1;  // 如果任何一个调用失败，返回 -1
+  }
+  for(int i = 0; i < MAXSCAN && i < num_check; i++){
+    check_va = va + i * PGSIZE; 
+    pte = walk(pagetable, check_va, 0);
+
+    if (pte == 0 || (*pte & PTE_V) == 0 || (*pte & PTE_U) == 0) {
+      return -1;  // 如果 pte 无效或不具备可用性或用户可访问性，则返回 -1
+    }
+    if(*pte & PTE_A){
+      *pte = *pte & ~PTE_A;
+      buf |= (1 << i);  
+    }
+  }
+  
+  if(copyout(pagetable, dstva, (char *)&buf, sizeof(buf)) < 0){
+    return -1;
+  }
+
   return 0;
 }
 #endif
